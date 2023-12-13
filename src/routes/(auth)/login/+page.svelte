@@ -1,4 +1,6 @@
-<script>
+<script lang="ts">
+    import {goto} from "$app/navigation";
+
     let email = '';
     let password = '';
     let isLoginFailed = false
@@ -14,16 +16,33 @@
             body: JSON.stringify({ email, password }),
         });
 
-        const data = await response.json()
-        console.log(data)
-
-        if (response.ok) {
-            localStorage.setItem('accessToken', data.data.accessToken);
-            localStorage.setItem('refreshToken', data.data.refreshToken);
+        if (!response.ok) {
+            isLoginFailed = true;
             return;
         }
 
-        isLoginFailed = true;
+        const data = await response.json();
+
+
+        const accessToken =  data.data.accessToken;
+        const refreshToken =  data.data.refreshToken;
+
+        if (!checkRole(accessToken)) {
+            isLoginFailed = true;
+            return;
+        }
+
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+
+        goto('/members');
+    }
+
+    function checkRole(token: string): boolean {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const payload = JSON.parse(window.atob(base64));
+        return payload.role === 'ADMIN';
     }
 </script>
 
@@ -62,7 +81,7 @@
                         <h4 class="mb-2">Welcome to Aja-Aja Admin 👋</h4>
                     </div>
 
-                    <form class="mb-3" on:submit|preventDefault={handleLogin}>
+                    <form class="mb-3" on:submit|preventDefault={handleLogin} autocomplete="on">
                         <div class="mb-3">
                             <label for="email" class="form-label">이메일</label>
                             <input
@@ -70,9 +89,11 @@
                                     class="form-control {isLoginFailed ? 'is-invalid-input' : ''}"
                                     id="email"
                                     bind:value={email}
-                                    name="email-username"
+                                    name="email"
                                     placeholder="이메일을 입력해주세요."
-                                    autofocus />
+                                    autocomplete="email"
+                                    required
+                            />
                         </div>
                         <div class="mb-3 form-password-toggle">
                             <div class="d-flex justify-content-between">
@@ -86,7 +107,9 @@
                                         class="form-control {isLoginFailed ? 'is-invalid-input' : ''}"
                                         name="password"
                                         placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                        aria-describedby="password" />
+                                        aria-describedby="password"
+                                        autocomplete="current-password"
+                                        required/>
                                 <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                             </div>
 
