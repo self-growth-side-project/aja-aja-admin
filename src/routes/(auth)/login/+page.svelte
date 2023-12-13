@@ -1,49 +1,8 @@
 <script lang="ts">
-    import {goto} from "$app/navigation";
+    import { enhance } from "$app/forms";
+    import type { ActionData } from "./$types";
 
-    let email = '';
-    let password = '';
-    let isLoginFailed = false
-
-    async function handleLogin() {
-        isLoginFailed = false;
-
-        const response = await fetch('http://15.165.249.34:8602/v1/sign-in', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, password }),
-        });
-
-        if (!response.ok) {
-            isLoginFailed = true;
-            return;
-        }
-
-        const data = await response.json();
-
-
-        const accessToken =  data.data.accessToken;
-        const refreshToken =  data.data.refreshToken;
-
-        if (!checkRole(accessToken)) {
-            isLoginFailed = true;
-            return;
-        }
-
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('refreshToken', refreshToken);
-
-        goto('/members');
-    }
-
-    function checkRole(token: string): boolean {
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const payload = JSON.parse(window.atob(base64));
-        return payload.role === 'ADMIN';
-    }
+    export let form: ActionData;
 </script>
 
 <svelte:head>
@@ -81,14 +40,13 @@
                         <h4 class="mb-2">Welcome to Aja-Aja Admin 👋</h4>
                     </div>
 
-                    <form class="mb-3" on:submit|preventDefault={handleLogin} autocomplete="on">
+                    <form class="mb-3" action="?/login" method="post" autocomplete="on" use:enhance>
                         <div class="mb-3">
                             <label for="email" class="form-label">이메일</label>
                             <input
                                     type="text"
-                                    class="form-control {isLoginFailed ? 'is-invalid-input' : ''}"
+                                    class="form-control {form?.invalid ? 'is-invalid-input' : ''}"
                                     id="email"
-                                    bind:value={email}
                                     name="email"
                                     placeholder="이메일을 입력해주세요."
                                     autocomplete="email"
@@ -103,8 +61,7 @@
                                 <input
                                         type="password"
                                         id="password"
-                                        bind:value={password}
-                                        class="form-control {isLoginFailed ? 'is-invalid-input' : ''}"
+                                        class="form-control {form?.invalid ? 'is-invalid-input' : ''}"
                                         name="password"
                                         placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                                         aria-describedby="password"
