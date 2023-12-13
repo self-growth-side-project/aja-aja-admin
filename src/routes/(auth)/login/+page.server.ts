@@ -4,7 +4,9 @@ import { fail, redirect } from '@sveltejs/kit';
 import { jwtDecode } from 'jwt-decode';
 
 export const load: PageServerLoad = async ({ locals }) => {
-	// 나중에 작성필요
+	if (locals.member) {
+		throw redirect(302, '/products');
+	}
 };
 
 const login: Action = async ({ cookies, request }) => {
@@ -54,12 +56,8 @@ const login: Action = async ({ cookies, request }) => {
 };
 
 function checkRole(token: string): boolean {
-	const decodedToken = jwtDecode<JwtPayload>(token);
+	const decodedToken = jwtDecode<{ role: string }>(token);
 	return decodedToken.role === 'ADMIN';
-}
-
-interface JwtPayload {
-	role: string;
 }
 
 export const actions: Actions = { login };
