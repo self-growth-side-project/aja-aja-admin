@@ -1,3 +1,7 @@
+<script>
+    import { fade } from 'svelte/transition';
+</script>
+
 <svelte:head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
@@ -23,7 +27,7 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
 </svelte:head>
 
-<div class="layout-wrapper layout-content-navbar">
+<div in:fade={{ duration: 300 }} class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
         <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
             <div class="app-brand demo">
