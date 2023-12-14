@@ -5,7 +5,7 @@ import { jwtDecode } from 'jwt-decode';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (locals.member) {
-		throw redirect(302, '/products');
+		throw redirect(302, '/members');
 	}
 };
 
@@ -52,7 +52,7 @@ const login: Action = async ({ cookies, request }) => {
 		maxAge: 60 * 60 * 24 * 30
 	});
 
-	throw redirect(302, '/products');
+	throw redirect(302, '/members');
 };
 
 function checkRole(token: string): boolean {

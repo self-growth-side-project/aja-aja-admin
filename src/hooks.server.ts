@@ -18,7 +18,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		role: member.role
 	};
 
-	return await resolve(event);
+	return resolve(event);
 };
 
 export interface JwtPayload {
