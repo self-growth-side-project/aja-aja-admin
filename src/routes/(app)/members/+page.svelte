@@ -10,11 +10,18 @@
 	);
 
 	$: currentPage = data.data.page;
+	$: currentSize = data.data.size;
 	$: totalPages = data.data.totalPages;
 	$: totalElements = data.data.totalElements;
 
+	$: currentPageGroup = Math.ceil(currentPage / 5);
+	$: startPage = (currentPageGroup - 1) * 5 + 1;
+	$: endPage = Math.min(startPage + 4, totalPages);
+
+	$: pageNumbers = Array.from({ length: (endPage - startPage + 1) }, (_, i) => startPage + i);
+
 	function changePage(newPage: any) {
-		goto(`/members?page=${newPage}&size=10&sort=id:DESC`);
+		goto(`/members?page=${newPage}&size=${currentSize}&sort=id:DESC`);
 	}
 </script>
 
@@ -25,7 +32,7 @@
 		<table class="table">
 			<thead>
 			<tr>
-				<th>아이디</th>
+				<th>고유 식별 아이디</th>
 				<th>이메일</th>
 				<th>권한</th>
 				<th>가입 일시</th>
@@ -60,7 +67,7 @@
 						<i class="tf-icon bx bx-chevron-left"></i>
 					</a>
 				</li>
-				{#each Array.from({ length: totalPages }, (_, i) => i + 1) as pageNum}
+				{#each pageNumbers as pageNum}
 					<li class="page-item {pageNum === currentPage ? 'active' : ''}">
 						<a class="page-link" href="#" on:click={() => changePage(pageNum)}>{pageNum}</a>
 					</li>
