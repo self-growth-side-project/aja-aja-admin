@@ -14,11 +14,10 @@
 	$: totalElements = data.data.totalElements;
 
 	function changePage(newPage: any) {
-		goto(`/members?page=${newPage}&size=10&sort=id:ASC`);
+		goto(`/members?page=${newPage}&size=10&sort=id:DESC`);
 	}
 </script>
 
-<h4 class="py-3 mb-4">가입한 회원</h4>
 <h4 class="py-3 mb-4">가입한 회원 (총 {totalElements}명)</h4>
 
 <div class="card">
@@ -32,7 +31,7 @@
 				<th>가입 일시</th>
 			</tr>
 			</thead>
-			<tbody class="table-border-bottom-0">
+			<tbody>
 			{#each members as member}
 				<tr>
 					<td>
@@ -48,21 +47,45 @@
 			</tbody>
 		</table>
 	</div>
-
-	<div>
-
-		{#each Array.from({ length: totalPages }, (_, i) => i + 1) as pageNum}
-			<button class:current-page = {pageNum === currentPage} on:click={() => changePage(pageNum)}>
-				{pageNum}
-			</button>
-		{/each}
+	<div class="demo-inline-spacing d-flex justify-content-center">
+		<nav aria-label="Page navigation">
+			<ul class="pagination">
+				<li class="page-item first">
+					<a class="page-link" href="#" on:click={() => changePage(1)}>
+						<i class="tf-icon bx bx-chevrons-left"></i>
+					</a>
+				</li>
+				<li class="page-item prev">
+					<a class="page-link" href="#" on:click={() => changePage(Math.max(currentPage - 1, 1))}>
+						<i class="tf-icon bx bx-chevron-left"></i>
+					</a>
+				</li>
+				{#each Array.from({ length: totalPages }, (_, i) => i + 1) as pageNum}
+					<li class="page-item {pageNum === currentPage ? 'active' : ''}">
+						<a class="page-link" href="#" on:click={() => changePage(pageNum)}>{pageNum}</a>
+					</li>
+				{/each}
+				<li class="page-item next">
+					<a class="page-link" href="#" on:click={() => changePage(Math.min(currentPage + 1, totalPages))}>
+						<i class="tf-icon bx bx-chevron-right"></i>
+					</a>
+				</li>
+				<li class="page-item last">
+					<a class="page-link" href="#" on:click={() => changePage(totalPages)}>
+						<i class="tf-icon bx bx-chevrons-right"></i>
+					</a>
+				</li>
+			</ul>
+		</nav>
 	</div>
-
 </div>
 
 <style>
-	.current-page {
-		font-weight: bold;
-		text-decoration: underline;
+	.pagination .page-link {
+		width: 35px;
+		height: 35px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 </style>

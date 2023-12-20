@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="../../../../assets/css/demo.css" />
     <link rel="stylesheet" href="../../../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
     <link rel="stylesheet" href="../../../../assets/vendor/css/pages/page-auth.css" />
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
     <script src="../../../../assets/vendor/js/helpers.js"></script>
     <script src="../../../../assets/js/config.js"></script>
