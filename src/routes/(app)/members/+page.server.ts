@@ -23,15 +23,7 @@ export const load = async ({ cookies }: { cookies: any }) => {
 		});
 	}
 
-	const responseData = await response.json();
-	const members = responseData.data.map(
-		(data: Member) =>
-			new Member(data.id, data.email, new MemberRole(data.role.code, data.role.name))
-	);
-
-	//console.log(members);
-
-	return null;
+	return await response.json();
 };
 
 async function renewAccessToken(cookies: any) {

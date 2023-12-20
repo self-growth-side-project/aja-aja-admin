@@ -1,4 +1,3 @@
-
 <script>
 	export let data;
 	const products = data.products;

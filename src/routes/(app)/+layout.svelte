@@ -37,10 +37,9 @@
             <div class="menu-inner-shadow"></div>
 
             <ul class="menu-inner py-1">
-                <!-- Dashboards -->
                 <li class="menu-item">
                     <a href="#" class="menu-link menu-toggle">
-                        <div data-i18n="Dashboards">회원목록</div>
+                        <div>가입한 회원</div>
                     </a>
                 </li>
             </ul>
