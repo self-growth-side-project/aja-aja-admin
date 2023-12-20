@@ -1,4 +1,5 @@
 import { redirect } from '@sveltejs/kit';
+import { baseUrl } from '$lib/constant';
 
 export const load = async ({ cookies, url }: { cookies: any; url: any }) => {
 	let accessToken = cookies.get('accessToken');
@@ -9,27 +10,21 @@ export const load = async ({ cookies, url }: { cookies: any; url: any }) => {
 
 	const page = url.searchParams.get('page') || '1';
 	const size = url.searchParams.get('size') || '10';
-	const sort = url.searchParams.get('sort') || 'id:ASC';
+	const sort = url.searchParams.get('sort') || 'id:DESC';
 
-	let response = await fetch(
-		`http://15.165.249.34:8602/v1/admin/members?page=${page}&size=${size}&sort=${sort}`,
-		{
-			headers: {
-				Authorization: `Bearer ${accessToken}`
-			}
+	let response = await fetch(`${baseUrl}/v1/admin/members?page=${page}&size=${size}&sort=${sort}`, {
+		headers: {
+			Authorization: `Bearer ${accessToken}`
 		}
-	);
+	});
 
 	if (response.status === 401) {
 		accessToken = await renewAccessToken(cookies);
-		response = await fetch(
-			`http://15.165.249.34:8602/v1/admin/members?page=${page}&size=${size}&sort=${sort}`,
-			{
-				headers: {
-					Authorization: `Bearer ${accessToken}`
-				}
+		response = await fetch(`${baseUrl}/v1/admin/members?page=${page}&size=${size}&sort=${sort}`, {
+			headers: {
+				Authorization: `Bearer ${accessToken}`
 			}
-		);
+		});
 	}
 
 	return await response.json();
@@ -38,7 +33,7 @@ export const load = async ({ cookies, url }: { cookies: any; url: any }) => {
 async function renewAccessToken(cookies: any) {
 	const refreshToken = cookies.get('refreshToken');
 
-	const response = await fetch('http://15.165.249.34:8602/v1/auths/refresh', {
+	const response = await fetch(`${baseUrl}/v1/auths/refresh`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'

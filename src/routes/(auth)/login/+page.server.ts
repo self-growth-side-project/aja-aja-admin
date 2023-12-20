@@ -2,6 +2,7 @@ import type { Action, Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from '../../../../.svelte-kit/types/src/routes/(app)/$types';
 import { fail, redirect } from '@sveltejs/kit';
 import { jwtDecode } from 'jwt-decode';
+import { baseUrl } from '$lib/constant';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (locals.member) {
@@ -15,7 +16,7 @@ const login: Action = async ({ cookies, request }) => {
 	const email = formData.get('email');
 	const password = formData.get('password');
 
-	const response = await fetch('http://15.165.249.34:8602/v1/sign-in', {
+	const response = await fetch(`${baseUrl}/v1/sign-in`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
