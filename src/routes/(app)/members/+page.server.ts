@@ -1,26 +1,35 @@
-import Member, { MemberRole } from '../../../lib/model/member';
 import { redirect } from '@sveltejs/kit';
 
-export const load = async ({ cookies }: { cookies: any }) => {
+export const load = async ({ cookies, url }: { cookies: any; url: any }) => {
 	let accessToken = cookies.get('accessToken');
 
 	if (!accessToken) {
 		accessToken = await renewAccessToken(cookies);
 	}
 
-	let response = await fetch('http://15.165.249.34:8602/v1/admin/members', {
-		headers: {
-			Authorization: `Bearer ${accessToken}`
-		}
-	});
+	const page = url.searchParams.get('page') || '1';
+	const size = url.searchParams.get('size') || '10';
+	const sort = url.searchParams.get('sort') || 'id:ASC';
 
-	if (response.status === 401) {
-		accessToken = await renewAccessToken(cookies);
-		response = await fetch('http://15.165.249.34:8602/v1/admin/members', {
+	let response = await fetch(
+		`http://15.165.249.34:8602/v1/admin/members?page=${page}&size=${size}&sort=${sort}`,
+		{
 			headers: {
 				Authorization: `Bearer ${accessToken}`
 			}
-		});
+		}
+	);
+
+	if (response.status === 401) {
+		accessToken = await renewAccessToken(cookies);
+		response = await fetch(
+			`http://15.165.249.34:8602/v1/admin/members?page=${page}&size=${size}&sort=${sort}`,
+			{
+				headers: {
+					Authorization: `Bearer ${accessToken}`
+				}
+			}
+		);
 	}
 
 	return await response.json();
