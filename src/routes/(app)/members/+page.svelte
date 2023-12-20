@@ -5,7 +5,7 @@
 
 	const members = data.data.map(
 			(data: Member) =>
-					new Member(data.id, data.email, new MemberRole(data.role.code, data.role.name))
+					new Member(data.id, data.email, data.createdAt as string, new MemberRole(data.role.code, data.role.name))
 	);
 </script>
 
@@ -20,7 +20,7 @@
 				<th>아이디</th>
 				<th>이메일</th>
 				<th>권한</th>
-				<th>가입일시</th>
+				<th>가입 일시</th>
 			</tr>
 			</thead>
 			<tbody class="table-border-bottom-0">
@@ -33,6 +33,7 @@
 					<td>
 						<span class="badge bg-label-success me-1">{member.role.name}</span>
 					</td>
+					<td>{member.createdAt}</td>
 				</tr>
 			{/each}
 			</tbody>

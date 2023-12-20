@@ -29,6 +29,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"dayjs": "^1.11.10",
 		"jwt-decode": "^4.0.0"
 	}
 }
