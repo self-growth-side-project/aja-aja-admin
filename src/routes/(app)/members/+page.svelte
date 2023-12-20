@@ -48,7 +48,7 @@
 					<td>
 						<span class="badge bg-label-success me-1">{member.role.name}</span>
 					</td>
-					<td>{member.createdAt}</td>
+					<td>{`${member.createdAt} +09:00`}</td>
 				</tr>
 			{/each}
 			</tbody>
