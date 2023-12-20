@@ -1,4 +1,3 @@
-// Member.ts
 export class MemberRole {
 	constructor(public code: string, public name: string) {}
 }
