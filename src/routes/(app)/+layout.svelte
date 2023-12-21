@@ -39,25 +39,24 @@
 
             <ul class="menu-inner py-1">
                 <li class="menu-item">
-                    <a href="#" class="menu-link menu-toggle">
+                    <a href="/members" class="menu-link menu-toggle">
                         <div>가입한 회원</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="/withdrawn-members" class="menu-link menu-toggle">
+                        <div>탈퇴한 회원</div>
                     </a>
                 </li>
             </ul>
         </aside>
 
-        <!-- Layout container -->
         <div class="layout-page">
-
-            <!-- Content wrapper -->
             <div class="content-wrapper">
-                <!-- Content -->
                 <div class="container-xxl flex-grow-1 container-p-y">
                     <slot></slot>
                 </div>
-                <!-- / Content -->
             </div>
-            <!-- Overlay -->
             <div class="layout-overlay layout-menu-toggle"></div>
         </div>
     </div>

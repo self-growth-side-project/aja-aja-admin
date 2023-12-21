@@ -1,12 +1,12 @@
 <script lang="ts">
-	import Member, {MemberRole} from "$lib/model/member.js";
+	import {MemberRole, WithdrawnMember} from "$lib/model/member.js";
 	import {goto} from "$app/navigation";
 
 	export let data;
 
-	$: members = data.data.items.map(
-			(data: Member) =>
-					new Member(data.id, data.email, data.createdAt as string, new MemberRole(data.role.code, data.role.name))
+	$: withdrawnMembers = data.data.items.map(
+			(data: WithdrawnMember) =>
+					new WithdrawnMember(data.id, data.memberId, data.email, data.joinedAt as string, data.createdAt as string, new MemberRole(data.role.code, data.role.name))
 	);
 
 	$: currentPage = data.data.page;
@@ -21,11 +21,11 @@
 	$: pageNumbers = Array.from({ length: (endPage - startPage + 1) }, (_, i) => startPage + i);
 
 	function changePage(newPage: any) {
-		goto(`/members?page=${newPage}&size=${currentSize}&sort=id:DESC`);
+		goto(`/withdrawn-members?page=${newPage}&size=${currentSize}&sort=id:DESC`);
 	}
 </script>
 
-<h4 class="py-3 mb-4">가입한 회원 (총 {totalElements}명)</h4>
+<h4 class="py-3 mb-4">탈퇴한 회원 (총 {totalElements}명)</h4>
 
 <div class="card">
 	<div class="table-responsive text-nowrap">
@@ -36,19 +36,21 @@
 				<th>이메일</th>
 				<th>권한</th>
 				<th>가입 일시</th>
+				<th>탈퇴 일시</th>
 			</tr>
 			</thead>
 			<tbody>
-			{#each members as member}
+			{#each withdrawnMembers as withdrawnMember}
 				<tr>
 					<td>
-						{member.id}
+						{withdrawnMember.memberId}
 					</td>
-					<td>{member.email}</td>
+					<td>{withdrawnMember.email}</td>
 					<td>
-						<span class="badge bg-label-success me-1">{member.role.name}</span>
+						<span class="badge bg-label-success me-1">{withdrawnMember.role.name}</span>
 					</td>
-					<td>{`${member.createdAt} +09:00`}</td>
+					<td>{`${withdrawnMember.joinedAt} +09:00`}</td>
+					<td>{`${withdrawnMember.createdAt} +09:00`}</td>
 				</tr>
 			{/each}
 			</tbody>
